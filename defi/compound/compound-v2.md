@@ -28,7 +28,7 @@ ETH 1000 _ 85%（ETH抵押率） + BTC 2000 _ 83%（BTC抵押率） = 2510 USD �
 
 可避免资金枯竭，当资金利用率高的时候，借款利率上升，借款人少，防止资金枯竭。储备金 reserves 同时能够防止挤兑。
 
-![img.png](compound-images/jumpRateModel.png)
+![img.png](image/jumpRateModel.png)
 - 当 U≤Ukink：
 r=rbase+slope×U
 当前的借款利率 = 基础利率 + 斜率 × 利用率
@@ -37,7 +37,7 @@ borrowRate = multiplier * utilizationRate + baseRate
 r=rbase+slope1×Ukink+slope2×(U−Ukink)
 borrowRate = (multiplier * kink + baseRate) +   jumpMultiplier * (utilizationRate - kink)
 
-![img.png](compound-images/simpleRateModel.png)
+![img.png](image/simpleRateModel.png)
 - r=rbase+Slope×U  
 当前的借款利率 = 基础利率 + 斜率 × 利用率
 borrowRate = multiplier * utilizationRate + baseRate
@@ -87,7 +87,7 @@ accrueInterest() 利率结算方法，系统核心结算函数
 
 - 复利模型
 复利的基本公式是：
-![img.png](compound-images/fulimodel.png)[图片]
+![img.png](image/fulimodel.png)
 复利增长通常表示为：borrowIndexnew=borrowIndexold×(1+simpleInterestFactor)
 -假设：
   - 初始 borrowIndex = 1.00e18
