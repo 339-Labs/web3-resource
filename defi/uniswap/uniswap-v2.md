@@ -120,19 +120,19 @@ dx / dy = x / y   =>   dx / x  =  dy / y  =  流动性配额 d（liquidity）/ t
     
     if (feeOn) kLast = uint(reserve0).mul(reserve1);
     //更新平台方结账时候所用的数据    
-
+    
 
 ####  - **burn: 移除流动性**
 
-移除流动性的核心部分
-    
-uint _totalSupply = totalSupply; // gas savings, must be defined here since totalSupply can update in _mintFee
-    
-amount0 = liquidity.mul(balance0) / _totalSupply;
-    
-amount1 = liquidity.mul(balance1) / _totalSupply;
-    
-根据用户持有的流动性凭证，占用总流动性的比例多少，根据这个比例去分别获取 token0 和 token1 的数量
+    移除流动性的核心部分
+        
+    uint _totalSupply = totalSupply; // gas savings, must be defined here since totalSupply can update in _mintFee
+        
+    amount0 = liquidity.mul(balance0) / _totalSupply;
+        
+    amount1 = liquidity.mul(balance1) / _totalSupply;
+        
+    根据用户持有的流动性凭证，占用总流动性的比例多少，根据这个比例去分别获取 token0 和 token1 的数量
 
 
 ####  - **swap: 兑换**
@@ -143,21 +143,21 @@ amount1 = liquidity.mul(balance1) / _totalSupply;
 ####  - **清算 _mintFee 发生在 mint 和 burn 操作时候**
 
 
-首先要知道资产度量是 Sqrt（k）也就是Sqrt（x*y）
-
-kLast：是上次burn/mint清算完后 池子中的未开方的资产度量  uint(reserve0).mul(reserve1) = x*y
-
-rootK：是本次 池子中的资产度量  Math.sqrt(uint(_reserve0).mul(_reserve1)) = Sqrt（x*y）
-
-Lp / totalSupply = （（rootK - kLast）/ 6 ）/（kLast + （rootK - kLast） * 5 / 6）
-
-= 增量度量的 1/6（平台）  /   （上次清算的度量 + 增量度量的 5/6（用户） ）
-
-= d Sqrt(k)  / （kLast + 5 * rootK）
-
-平台收益LP  liquidity = totalSupply × (√k - √kLast) / (√kLast+√k × 5)
-
-使用平台的收益去铸造LP时候，将平台方的收益单独去铸造，实际totalSupply分母里面 对应的总的度量是需要将去平台方的
+    首先要知道资产度量是 Sqrt（k）也就是Sqrt（x*y）
+    
+    kLast：是上次burn/mint清算完后 池子中的未开方的资产度量  uint(reserve0).mul(reserve1) = x*y
+    
+    rootK：是本次 池子中的资产度量  Math.sqrt(uint(_reserve0).mul(_reserve1)) = Sqrt（x*y）
+    
+    Lp / totalSupply = （（rootK - kLast）/ 6 ）/（kLast + （rootK - kLast） * 5 / 6）
+    
+    = 增量度量的 1/6（平台）  /   （上次清算的度量 + 增量度量的 5/6（用户） ）
+    
+    = d Sqrt(k)  / （kLast + 5 * rootK）
+    
+    平台收益LP  liquidity = totalSupply × (√k - √kLast) / (√kLast+√k × 5)
+    
+    使用平台的收益去铸造LP时候，将平台方的收益单独去铸造，实际totalSupply分母里面 对应的总的度量是需要将去平台方的
 
 
     
@@ -200,19 +200,19 @@ Lp / totalSupply = （（rootK - kLast）/ 6 ）/（kLast + （rootK - kLast） 
 
 ####  - **闪电贷**
 
-IUniswapV2Callee(to).uniswapV2Call(msg.sender, amount0Out, amount1Out, data);
-
-uniswapV2Call 是 Flash Swap 的攻击入口， 攻击可以是
-
-跨池套利
-
-价格操控 + 借贷攻击
-
-折价买入、高价卖出
-
-如果借贷平台使用 balanceOf 获取价格，就能够操纵价格，否则只能简单套利
-
-要在 一个 tx 内完成借出 + 操作 + 归还，核心的是在逻辑内控制住 token 的流动，留利润
+    IUniswapV2Callee(to).uniswapV2Call(msg.sender, amount0Out, amount1Out, data);
+    
+    uniswapV2Call 是 Flash Swap 的攻击入口， 攻击可以是
+    
+    跨池套利
+    
+    价格操控 + 借贷攻击
+    
+    折价买入、高价卖出
+    
+    如果借贷平台使用 balanceOf 获取价格，就能够操纵价格，否则只能简单套利
+    
+    要在 一个 tx 内完成借出 + 操作 + 归还，核心的是在逻辑内控制住 token 的流动，留利润
 
 # **V2-periphery 路由合约 **
 
@@ -228,24 +228,24 @@ uniswapV2Call 是 Flash Swap 的攻击入口， 攻击可以是
     liquidity = IUniswapV2Pair(pair).mint(to);
     if (msg.value > amountETH) TransferHelper.safeTransferETH(msg.sender, msg.value - amountETH);
 
-- 根据已有的储备量（reserves）计算最佳添加流动性的两种 token 的数量（amountA 和 amountB），如果新池子直接创建
-- 查找交易对合约地址
-- 将 ERC20 token 转入交易对合约
-- 将 ETH 转成 WETH
-- 将 WETH 发送到交易对合约
-- 调用交易对合约的 mint() 铸造 LP token
-- 返还多余的 ETH
+    - 根据已有的储备量（reserves）计算最佳添加流动性的两种 token 的数量（amountA 和 amountB），如果新池子直接创建
+    - 查找交易对合约地址
+    - 将 ERC20 token 转入交易对合约
+    - 将 ETH 转成 WETH
+    - 将 WETH 发送到交易对合约
+    - 调用交易对合约的 mint() 铸造 LP token
+    - 返还多余的 ETH
 
 
 #### swapExactTokensForTokens(uint amountIn, uint amountOutMin, address[] calldata path, address to,  uint deadline )  兑换
 
-根据输入的一种tokenA 数量amountIn 来兑换另外一种tokenB 数量 amountOutMin
-
-amountOutMin 是前端根据查询接口及滑点计算出来的数量
-
-deadline  兑换超时时间，默认30分钟
-
-path 是兑换的最佳路径 。 可能没有直接兑换路径需要前端算出最佳的token兑换路径。
+    根据输入的一种tokenA 数量amountIn 来兑换另外一种tokenB 数量 amountOutMin
+    
+    amountOutMin 是前端根据查询接口及滑点计算出来的数量
+    
+    deadline  兑换超时时间，默认30分钟
+    
+    path 是兑换的最佳路径 。 可能没有直接兑换路径需要前端算出最佳的token兑换路径。
 
 
 ![img.png](image/v2-5.png)
