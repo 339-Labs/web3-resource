@@ -239,3 +239,5 @@ Comptroller 是 Compound 协议的主控合约，负责管理市场的加入和�
   限制了 借款上限和供应上限。每个区块自动执行利息结算 accrueInterest()，兑换率exchangeRate也会在此时更新 。用户抵押资产的抵押率过低时，协议允许其他用户自动清算。COMP token奖励不是强制发放了。
 
   v3 改进了 用户界面 和 操作流程，使得存取款、借款和偿还更加灵活，并引入了更多的高级功能，如 闪电贷、收益优化 等。
+
+https://lsg8lqd8j9e8.sg.larksuite.com/docx/Fll1dSRyxoGA56xT0lll31V6g2g
